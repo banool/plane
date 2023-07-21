@@ -1,0 +1,39 @@
+[package]
+name = "plane"
+version = "0.1.0"
+edition = "2021"
+resolver = "2"
+exclude = ["dist", "build", "assets", "credits"]
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+# The profile that 'cargo dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+[features]
+dev = ["bevy/bevy_dylib"]
+
+[dependencies]
+# You have to remove the dynamic_linking feature for this to build for wasm.
+bevy = { version = "0.11.0", features = ["dynamic_linking"] }
+# bevy = { version = "0.11.0" }
+bevy_rapier2d = { version = "0.22.0", features = [ "debug-render-2d", "enhanced-determinism" ] }
+bevy_rapier3d = "0.22.0"
+rand = { version = "0.8.3" }
+# bevy_ggrs = { git = "https://github.com/gschup/bevy_ggrs", branch = "main", features = ["wasm-bindgen"] }
+bevy_ggrs = { git = "https://github.com/gschup/bevy_ggrs", branch = "main" }
+# https://github.com/johanhelsing/matchbox/pull/264
+bevy_matchbox = { git = "https://github.com/johanhelsing/matchbox", branch = "main", features = ["ggrs"] }
+bytemuck = "1.13.1"
+serde = "1.0.171"
+
